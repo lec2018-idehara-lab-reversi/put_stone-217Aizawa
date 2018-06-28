@@ -87,10 +87,11 @@ void mouseClicked()
   int gy = mouseY / CELLSIZE + 1;
 
   // もしその場所に石をおいて良いならば
-  if(  )
+  if(turn(ban, teban, gx, gy) != 0 ){
     put(ban, teban, gx, gy);
 
   teban = -teban;
+  }
 }
 
 // 盤面 b に、色 te の石を (x,y) に置こうとしたとき、(dx,dy) 方向に相手の石が何個ひっくり返せるか数えて答える関数
@@ -105,14 +106,17 @@ int turnSub(int[][] b, int te, int x, int y, int dx, int dy)
   y += dy;
 
   // そこが「相手の石の色である」あいだ、その数を数えながらその先に移動していく。
-  while(  )
+  while(b[x][y] == -te)
   {
+    x += dx;
+    y += dy;
+    result++;
 
   }
 
   // 繰り返しを抜けるのは「相手の石でない」ものを発見したとき。このとき自分の石を見ていれば、ひっくり返せる。それまで
   // 自分の石でなければ、それまで何個数えていても、ひっくり返せるのは０個。
-  if( )
+  if(b[x][y] == te)
   {
     return result;
   }
@@ -138,6 +142,19 @@ int turn(int[][] b, int te, int x, int y)
   // (-1,-1) 方向の数を数える。
   result += turnSub(b, te, x, y, -1, -1);
   // あと７方向全部数えて足し合わせる。
+  result += turnSub(b, te, x, y, -1, 1);
+  
+  result += turnSub(b, te, x, y, -1, 0);
+  
+  result += turnSub(b, te, x, y, 0, -1);
+  
+  result += turnSub(b, te, x, y, 0, 1);
+  
+  result += turnSub(b, te, x, y, 1, -1);
+  
+  result += turnSub(b, te, x, y, 1, 1);
+  
+  result += turnSub(b, te, x, y, 1, 0);
 
   return result;
 }
@@ -145,18 +162,54 @@ int turn(int[][] b, int te, int x, int y)
 
 int putSub(int[][] b, int te, int x, int y, int dx, int dy)
 {
+  int result = turnSub(b, te, x, y, dx, dy);//turnSubに何個ひっくり返せるか問い合わせる
+  
+  x += dx;//移動する
+  y += dy;
+  
   // もしもその方向に石をひっくり返せないなら、何もせず０を返す。
-
-
+  if(result == 0){
+    
+    return 0;//関数終了
+    
   // そうでなければ、一歩動いてから
 
-
-  // 相手の石が見える間、石をひっくり返していく
+  }// 相手の石が見える間、石をひっくり返していく
+  while(b[x][y] == -te){
+    b[x][y] = te;
+    
+    x += dx;
+    y += dy;
+    result++;
+  }
+  return 0;
 }
 
 
 int put(int[][] b, int te, int x, int y)
 {
-// ８方向に putsub を呼び出す。
+  // ８方向に putsub を呼び出す。
+  int result = 0;
+  
+  b[x][y] = te;
+
+  // (-1,-1) 方向の数を数える。
+  result += putSub(b, te, x, y, -1, -1);
+  // あと７方向全部数えて足し合わせる。
+  result += putSub(b, te, x, y, -1, 1);
+  
+  result += putSub(b, te, x, y, -1, 0);
+  
+  result += putSub(b, te, x, y, 0, -1);
+  
+  result += putSub(b, te, x, y, 0, 1);
+  
+  result += putSub(b, te, x, y, 1, -1);
+  
+  result += putSub(b, te, x, y, 1, 1);
+  
+  result += putSub(b, te, x, y, 1, 0);
+  
+  return result;
 
 }
