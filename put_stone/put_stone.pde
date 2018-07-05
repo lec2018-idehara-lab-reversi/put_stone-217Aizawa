@@ -91,13 +91,13 @@ void mouseClicked()
     put(ban, teban, gx, gy);
 
   teban = -teban;
+  
   }
 }
 
 // 盤面 b に、色 te の石を (x,y) に置こうとしたとき、(dx,dy) 方向に相手の石が何個ひっくり返せるか数えて答える関数
 // (dx,dy) は、(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1) で８方向
-int turnSub(int[][] b, int te, int x, int y, int dx, int dy)
-{
+int turnSub(int[][] b, int te, int x, int y, int dx, int dy){
   // 相手の石を数える変数
   int result = 0;
 
@@ -108,6 +108,7 @@ int turnSub(int[][] b, int te, int x, int y, int dx, int dy)
   // そこが「相手の石の色である」あいだ、その数を数えながらその先に移動していく。
   while(b[x][y] == -te)
   {
+    
     x += dx;
     y += dy;
     result++;
@@ -160,7 +161,7 @@ int turn(int[][] b, int te, int x, int y)
 }
 
 
-int putSub(int[][] b, int te, int x, int y, int dx, int dy)
+int putSub(int[][] b, int te, int x, int y, int dx, int dy)//石をひっくり返す
 {
   int result = turnSub(b, te, x, y, dx, dy);//turnSubに何個ひっくり返せるか問い合わせる
   
@@ -176,7 +177,7 @@ int putSub(int[][] b, int te, int x, int y, int dx, int dy)
 
   }// 相手の石が見える間、石をひっくり返していく
   while(b[x][y] == -te){
-    b[x][y] = te;
+    b[x][y] = te;              //ひっくり返せることを確認してから、ひっくり返す
     
     x += dx;
     y += dy;
@@ -186,7 +187,7 @@ int putSub(int[][] b, int te, int x, int y, int dx, int dy)
 }
 
 
-int put(int[][] b, int te, int x, int y)
+int put(int[][] b, int te, int x, int y)//石を置く
 {
   // ８方向に putsub を呼び出す。
   int result = 0;
